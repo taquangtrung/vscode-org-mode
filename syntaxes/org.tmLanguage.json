@@ -4,7 +4,7 @@
     "patterns": [
         {
             "name": "markup.heading.org",
-            "begin": "^\\s*[*]{1}\\s+",
+            "begin": "^[*]{1}\\s+",
             "end": "$",
             "patterns": [
                 {
@@ -14,7 +14,7 @@
         },
         {
             "name": "entity.name.type.org",
-            "begin": "^\\s*[*]{2}\\s+",
+            "begin": "^[*]{2}\\s+",
             "end": "$",
             "patterns": [
                 {
@@ -24,7 +24,7 @@
         },
         {
             "name": "entity.name.function.org",
-            "begin": "^\\s*[*]{3}\\s+",
+            "begin": "^[*]{3}\\s+",
             "end": "$",
             "patterns": [
                 {
@@ -34,7 +34,7 @@
         },
         {
             "name": "entity.other.attribute-name.org",
-            "begin": "^\\s*[*]{4}\\s+",
+            "begin": "^[*]{4}\\s+",
             "end": "$",
             "patterns": [
                 {
