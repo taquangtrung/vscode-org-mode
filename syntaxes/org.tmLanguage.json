@@ -1888,6 +1888,9 @@
                     "include": "#verbatim"
                 },
                 {
+                    "include": "#unnumbered-list"
+                },
+                {
                     "include": "#comment"
                 },
                 {
@@ -2022,6 +2025,19 @@
                 {
                     "name": "variable.org",
                     "match": "(^|\\s)\\=[^\\s](.*?[^\\s])?\\=($|\\W)"
+                }
+            ]
+        },
+        "unnumbered-list": {
+            "patterns": [
+                {
+                    "match": "^(\\s*-|\\s*\\+|\\s+\\*)\\s",
+                    "captures": {
+                        "1": {
+                            "name": "punctuation.definition.list"
+                        }
+                    }
+
                 }
             ]
         },
