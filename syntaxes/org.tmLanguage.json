@@ -2015,16 +2015,24 @@
         "code": {
             "patterns": [
                 {
-                    "name": "variable.org",
-                    "match": "(^|\\s)\\~[^\\s](.*?[^\\s])?\\~($|\\W)"
+                    "match": "(^|\\s)(\\~[^\\s](.*?[^\\s])?\\~)($|\\W)",
+                    "captures": {
+                        "2": {
+                            "name": "markup.code.org"
+                        }
+                    }
                 }
             ]
         },
         "verbatim": {
             "patterns": [
                 {
-                    "name": "variable.org",
-                    "match": "(^|\\s)\\=[^\\s](.*?[^\\s])?\\=($|\\W)"
+                    "match": "(^|\\s)(\\=[^\\s](.*?[^\\s])?\\=)($|\\W)",
+                    "captures": {
+                        "2": {
+                            "name": "markup.verbatim.org"
+                        }
+                    }
                 }
             ]
         },
