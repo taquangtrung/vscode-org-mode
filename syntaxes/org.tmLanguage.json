@@ -2031,7 +2031,7 @@
         "unnumbered-list": {
             "patterns": [
                 {
-                    "match": "^(\\s*-|\\s*\\+|\\s+\\*)\\s",
+                    "match": "^(\\s*-|\\s*\\+|\\s+\\*)(?=\\s)",
                     "captures": {
                         "1": {
                             "name": "punctuation.definition.list"
