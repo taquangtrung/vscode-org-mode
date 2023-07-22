@@ -2027,7 +2027,7 @@
         "verbatim": {
             "patterns": [
                 {
-                    "match": "(^|\\s)(\\=[^\\s](.*?[^\\s])?\\=)($|\\W)",
+                    "match": "(^|\\s)(\\=[^\\s]([^=]*?[^\\s])?\\=)($|\\W)",
                     "captures": {
                         "2": {
                             "name": "markup.verbatim.org"
