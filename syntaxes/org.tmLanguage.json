@@ -3,7 +3,7 @@
     "name": "Org Markup",
     "patterns": [
         {
-            "name": "markup.heading.org",
+            "name": "heading.1.org",
             "begin": "^[*]{1}\\s+",
             "end": "$",
             "patterns": [
@@ -13,7 +13,7 @@
             ]
         },
         {
-            "name": "entity.name.type.org",
+            "name": "heading.2.org",
             "begin": "^[*]{2}\\s+",
             "end": "$",
             "patterns": [
@@ -23,7 +23,7 @@
             ]
         },
         {
-            "name": "entity.name.function.org",
+            "name": "heading.3.org",
             "begin": "^[*]{3}\\s+",
             "end": "$",
             "patterns": [
@@ -33,8 +33,28 @@
             ]
         },
         {
-            "name": "entity.other.attribute-name.org",
+            "name": "heading.4.org",
             "begin": "^[*]{4}\\s+",
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#header-matches"
+                }
+            ]
+        },
+        {
+            "name": "heading.5.org",
+            "begin": "^[*]{5}\\s+",
+            "end": "$",
+            "patterns": [
+                {
+                    "include": "#header-matches"
+                }
+            ]
+        },
+        {
+            "name": "heading.6.org",
+            "begin": "^[*]{6}\\s+",
             "end": "$",
             "patterns": [
                 {
@@ -1975,7 +1995,7 @@
         "userKeywords": {
             "patterns": [
                 {
-                    "name": "string.quoted.double.org",
+                    "name": "markup.keyword.user.org",
                     "match": "\\b([A-Z]{3,})\\b"
                 }
             ]
@@ -1983,24 +2003,54 @@
         "bold": {
             "patterns": [
                 {
-                    "name": "markup.bold.org",
-                    "match": "(^|\\s)\\*[^\\s](.*?[^\\s])?\\*($|\\W)"
+                    "match": "(^|\\s)(\\*)([^\\s](.*?[^\\s])?)(\\*)($|\\W)",
+                    "captures": {
+                        "2": {
+                            "name": "markup.marker.org"
+                        },
+                        "3": {
+                            "name": "markup.bold.org"
+                        },
+                        "5": {
+                            "name": "markup.marker.org"
+                        }
+                    }
                 }
             ]
         },
         "italic": {
             "patterns": [
                 {
-                    "name": "markup.italic.org",
-                    "match": "(^|\\s)/[^\\s](.*?[^\\s])?/($|\\W)"
+                    "match": "(^|\\s)(/)([^\\s](.*?[^\\s])?)(/)($|\\W)",
+                    "captures": {
+                        "2": {
+                            "name": "markup.marker.org"
+                        },
+                        "3": {
+                            "name": "markup.italic.org"
+                        },
+                        "5": {
+                            "name": "markup.marker.org"
+                        }
+                    }
                 }
             ]
         },
         "underline": {
             "patterns": [
                 {
-                    "name": "markup.underline.org",
-                    "match": "(^|\\s)\\_[^\\s](.*?[^\\s])?\\_($|\\W)"
+                    "match": "(^|\\s)(\\_)([^\\s](.*?[^\\s])?)(\\_)($|\\W)",
+                    "captures": {
+                        "2": {
+                            "name": "markup.marker.org"
+                        },
+                        "3": {
+                            "name": "markup.underline.org"
+                        },
+                        "5": {
+                            "name": "markup.marker.org"
+                        }
+                    }
                 }
             ]
         },
@@ -2015,10 +2065,16 @@
         "code": {
             "patterns": [
                 {
-                    "match": "(^|\\s)(\\~[^\\s]([^~]*?[^\\s])?\\~)($|\\W)",
+                    "match": "(^|\\s)(\\~)([^\\s]([^~]*?[^\\s])?)(\\~)($|\\W)",
                     "captures": {
                         "2": {
+                            "name": "markup.marker.org"
+                        },
+                        "3": {
                             "name": "markup.code.org"
+                        },
+                        "5": {
+                            "name": "markup.marker.org"
                         }
                     }
                 }
@@ -2027,10 +2083,16 @@
         "verbatim": {
             "patterns": [
                 {
-                    "match": "(^|\\s)(\\=[^\\s]([^=]*?[^\\s])?\\=)($|\\W)",
+                    "match": "(^|\\s)(\\=)([^\\s]([^=]*?[^\\s])?)(\\=)($|\\W)",
                     "captures": {
                         "2": {
+                            "name": "markup.marker.org"
+                        },
+                        "3": {
                             "name": "markup.verbatim.org"
+                        },
+                        "5": {
+                            "name": "markup.marker.org"
                         }
                     }
                 }
@@ -2045,7 +2107,6 @@
                             "name": "punctuation.definition.list"
                         }
                     }
-
                 }
             ]
         },
@@ -2070,10 +2131,10 @@
                     "match": "^(#\\+\\w+:)\\s(.*)$",
                     "captures": {
                         "1": {
-                            "name": "support.type.property-name.org"
+                            "name": "markup.property.name.org"
                         },
                         "2": {
-                            "name": "meta.structure.dictionary.value.org"
+                            "name": "markdup.property.value.org"
                         }
                     }
                 }
