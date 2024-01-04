@@ -1928,9 +1928,6 @@
                 },
                 {
                     "include": "#done"
-                },
-                {
-                    "include": "#userKeywords"
                 }
             ]
         },
@@ -1989,14 +1986,6 @@
                 {
                     "name": "keyword.control.org",
                     "match": "\\bDONE\\b"
-                }
-            ]
-        },
-        "userKeywords": {
-            "patterns": [
-                {
-                    "name": "markup.keyword.user.org",
-                    "match": "\\b([A-Z]{3,})\\b"
                 }
             ]
         },
