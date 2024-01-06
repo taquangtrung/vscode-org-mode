@@ -12,27 +12,32 @@ import {
 } from 'vscode';
 import * as utils from './utils';
 
-// ChunkType value is used as SymbolKind for outline
-enum ChunkType {
-    SECTION = SymbolKind.Constant,
-    BLOCK = SymbolKind.Number
+interface IChunk {
+    title: string;
+    level: number;
+    sectionNumber: string;
+    startLine: number;
 }
-interface IChunk { type: ChunkType, title: string, level: number, startLine: number }
 
 export class OrgFoldingAndOutlineProvider implements FoldingRangeProvider, DocumentSymbolProvider {
-
     private documentStateRegistry: WeakMap<TextDocument, OrgFoldingAndOutlineDocumentState>;
 
     constructor() {
         this.documentStateRegistry = new WeakMap();
     }
 
-    public provideFoldingRanges(document: TextDocument, token: CancellationToken): ProviderResult<FoldingRange[]> {
+    public provideFoldingRanges(
+        document: TextDocument,
+        token: CancellationToken
+    ): ProviderResult<FoldingRange[]> {
         const state = this.getOrCreateDocumentState(document);
         return state.getRanges(document);
     }
 
-    public provideDocumentSymbols(document: TextDocument, token: CancellationToken): ProviderResult<SymbolInformation[]> {
+    public provideDocumentSymbols(
+        document: TextDocument,
+        token: CancellationToken
+    ): ProviderResult<SymbolInformation[]> {
         const state = this.getOrCreateDocumentState(document);
         return state.getSymbols(document);
     }
@@ -73,26 +78,29 @@ class OrgFoldingAndOutlineDocumentState {
 
         const count = document.lineCount;
         const stack: IChunk[] = [];
-        let inBlock = false;
+
+        let currentIndices = [];
 
         for (let lineNumber = 0; lineNumber < count; lineNumber++) {
             const element = document.lineAt(lineNumber);
             const text = element.text;
 
-            if (inBlock) {
-                if (utils.isBlockEndLine(text)) {
-                    inBlock = false;
-                    if (stack.length > 0 && stack[stack.length - 1].type === ChunkType.BLOCK) {
-                        const localTop = stack.pop();
-                        this.createSection(localTop, lineNumber);
-                    }
-                }
-            } else if (utils.isBlockStartLine(text)) {
-                inBlock = true;
-                const title = this.extractBlockTitle(text);
-                stack.push({ type: ChunkType.BLOCK, title, level: Number.MAX_SAFE_INTEGER, startLine: lineNumber });
-            } else if (utils.isHeaderLine(text)) {
+            if (utils.isHeaderLine(text)) {
                 const currentLevel = utils.getStarPrefixCount(text);
+
+                const indexLength = currentIndices.length;
+                if (currentLevel > indexLength) {
+                    for (let i = indexLength; i < currentLevel; i++) {
+                        currentIndices.push(1);
+                    }
+                } else if (currentLevel < indexLength) {
+                    for (let i = currentLevel; i < indexLength; i++) {
+                        currentIndices.pop();
+                    }
+                } else {
+                    const idx = currentIndices.pop();
+                    currentIndices.push(idx + 1);
+                }
 
                 // close previous sections
                 while (stack.length > 0 && stack[stack.length - 1].level >= currentLevel) {
@@ -101,7 +109,12 @@ class OrgFoldingAndOutlineDocumentState {
                 }
 
                 const title = utils.getHeaderTitle(text);
-                stack.push({ type: ChunkType.SECTION, title, level: currentLevel, startLine: lineNumber });
+                stack.push({
+                    title,
+                    level: currentLevel,
+                    sectionNumber: currentIndices.join('.'),
+                    startLine: lineNumber
+                });
             }
         }
 
@@ -113,21 +126,12 @@ class OrgFoldingAndOutlineDocumentState {
 
     private createSection(chunk: IChunk, endLine) {
         this.ranges.push(new FoldingRange(chunk.startLine, endLine));
-        this.symbols.push(new SymbolInformation(
-            chunk.title,
-            chunk.type.valueOf(),
-            new Range(
-                new Position(chunk.startLine, 0),
-                new Position(endLine, 0)
+        this.symbols.push(
+            new SymbolInformation(
+                `${chunk.sectionNumber}. ${chunk.title}`,
+                SymbolKind.Field,
+                new Range(new Position(chunk.startLine, 0), new Position(endLine, 0))
             )
-        ));
-    }
-
-    private extractBlockTitle(line: string) : string {
-        let titleStartAt = line.indexOf('_') + 1;
-        if(titleStartAt === 0) {
-            titleStartAt = line.indexOf(':') + 2;
-        }
-        return line.substr(titleStartAt);
+        );
     }
 }
