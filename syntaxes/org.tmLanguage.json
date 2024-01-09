@@ -1899,9 +1899,6 @@
                     "include": "#underline"
                 },
                 {
-                    "include": "#literal"
-                },
-                {
                     "include": "#code"
                 },
                 {
@@ -1912,6 +1909,9 @@
                 },
                 {
                     "include": "#comment"
+                },
+                {
+                    "include": "#drawer"
                 },
                 {
                     "include": "#keywords"
@@ -2043,14 +2043,6 @@
                 }
             ]
         },
-        "literal": {
-            "patterns": [
-                {
-                    "name": "markup.italic.org",
-                    "match": "^:.+"
-                }
-            ]
-        },
         "code": {
             "patterns": [
                 {
@@ -2114,8 +2106,27 @@
                 }
             ]
         },
+        "drawer": {
+            "patterns": [
+                {
+                    "name": "markup.marker.drawer.org",
+                    "match": "^:.+"
+                }
+            ]
+        },
         "keywords": {
             "patterns": [
+                {
+                    "match": "^(#\\+(title|author|date):)\\s(.*)$",
+                    "captures": {
+                        "1": {
+                            "name": "markup.property.name.org"
+                        },
+                        "3": {
+                            "name": "markup.marker.document.info.org"
+                        }
+                    }
+                },
                 {
                     "match": "^(#\\+\\w+:)\\s(.*)$",
                     "captures": {
@@ -2123,7 +2134,7 @@
                             "name": "markup.property.name.org"
                         },
                         "2": {
-                            "name": "markdup.property.value.org"
+                            "name": "markup.property.value.org"
                         }
                     }
                 }
