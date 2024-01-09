@@ -12,8 +12,15 @@ import {
 } from 'vscode';
 import * as utils from './utils';
 
+enum ChunkType {
+    Section,
+    Block,
+    Drawer
+}
+
 interface IChunk {
     title: string;
+    type: ChunkType;
     level: number;
     sectionNumber: string;
     startLine: number;
@@ -79,13 +86,50 @@ class OrgFoldingAndOutlineDocumentState {
         const count = document.lineCount;
         const stack: IChunk[] = [];
 
+        let inBlock = false;
+        let inDrawer = false;
+
         let currentIndices = [];
 
         for (let lineNumber = 0; lineNumber < count; lineNumber++) {
             const element = document.lineAt(lineNumber);
             const text = element.text;
 
-            if (utils.isHeaderLine(text)) {
+            if (inBlock) {
+                if (utils.isBlockEndLine(text)) {
+                    inBlock = false;
+                    if (stack.length > 0 && stack[stack.length - 1].type === ChunkType.Block) {
+                        const localTop = stack.pop();
+                        this.createSection(localTop, lineNumber);
+                    }
+                }
+            } else if (inDrawer) {
+                if (utils.isDrawerEndLine(text)) {
+                    inDrawer = false;
+                    if (stack.length > 0 && stack[stack.length - 1].type === ChunkType.Drawer) {
+                        const localTop = stack.pop();
+                        this.createSection(localTop, lineNumber);
+                    }
+                }
+            } else if (utils.isBlockStartLine(text)) {
+                inBlock = true;
+                stack.push({
+                    title: '',
+                    type: ChunkType.Block,
+                    level: 0,
+                    sectionNumber: '',
+                    startLine: lineNumber
+                });
+            } else if (utils.isDrawerStartLine(text)) {
+                inDrawer = true;
+                stack.push({
+                    title: '',
+                    type: ChunkType.Drawer,
+                    level: 0,
+                    sectionNumber: '',
+                    startLine: lineNumber
+                });
+            } else if (utils.isHeaderLine(text)) {
                 const currentLevel = utils.getStarPrefixCount(text);
 
                 const indexLength = currentIndices.length;
@@ -111,6 +155,7 @@ class OrgFoldingAndOutlineDocumentState {
                 const title = utils.getHeaderTitle(text);
                 stack.push({
                     title,
+                    type: ChunkType.Section,
                     level: currentLevel,
                     sectionNumber: currentIndices.join('.'),
                     startLine: lineNumber
@@ -126,12 +171,15 @@ class OrgFoldingAndOutlineDocumentState {
 
     private createSection(chunk: IChunk, endLine) {
         this.ranges.push(new FoldingRange(chunk.startLine, endLine));
-        this.symbols.push(
-            new SymbolInformation(
-                `${chunk.sectionNumber}. ${chunk.title}`,
-                SymbolKind.Field,
-                new Range(new Position(chunk.startLine, 0), new Position(endLine, 0))
-            )
-        );
+
+        if (chunk.type === ChunkType.Section) {
+            this.symbols.push(
+                new SymbolInformation(
+                    `${chunk.sectionNumber}. ${chunk.title}`,
+                    SymbolKind.Field,
+                    new Range(new Position(chunk.startLine, 0), new Position(endLine, 0))
+                )
+            );
+        }
     }
 }

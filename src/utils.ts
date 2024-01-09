@@ -259,6 +259,20 @@ export function isBlockStartLine(line: string): boolean {
 }
 
 /**
+ * Check if the line is a drawer start.
+ */
+export function isDrawerStartLine(line: string): boolean {
+    return /^:.*:\s*$/.test(line);
+}
+
+/**
+ * Check if the line is a drawer end.
+ */
+export function isDrawerEndLine(line: string): boolean {
+    return /^:(end|END):\s*/.test(line);
+}
+
+/**
  * Check if the line is a header.
  * @param line The textual representation of the line.
  * @return true if the specified line is a header, false otherwise.
