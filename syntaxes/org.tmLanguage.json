@@ -241,6 +241,39 @@
                     ]
                 },
                 {
+                    "name": "meta.block.source.solidity.org",
+                    "begin": "(?i)(?:^|\\G)(?:\\s*)(#\\+BEGIN_SRC)\\s+(solidity)\\b\\s*(.*)$",
+                    "end": "(?i)(?:^|\\G)(?:\\s*)(#\\+END_SRC)\\s*$",
+                    "beginCaptures": {
+                        "1": {
+                            "name": "keyword.control.block.org"
+                        },
+                        "2": {
+                            "name": "constant.other.language.org"
+                        },
+                        "3": {
+                            "name": "string.other.header-args.org"
+                        }
+                    },
+                    "endCaptures": {
+                        "1": {
+                            "name": "keyword.control.block.org"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "begin": "(^|\\G)(\\s*)(.*)",
+                            "while": "(?i)(^|\\G)(?!\\s*#\\+END_SRC\\s*)",
+                            "contentName": "meta.embedded.block.solidity",
+                            "patterns": [
+                                {
+                                    "include": "source.solidity"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "meta.block.source.python.org",
                     "begin": "(?i)(?:^|\\G)(?:\\s*)(#\\+BEGIN_SRC)\\s+(python|py|py3|rpy|pyw|cpy|SConstruct|Sconstruct|sconstruct|SConscript|gyp|gypi)\\b\\s*(.*)$",
                     "end": "(?i)(?:^|\\G)(?:\\s*)(#\\+END_SRC)\\s*$",
