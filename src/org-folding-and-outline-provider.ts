@@ -15,7 +15,8 @@ import * as utils from './utils';
 enum ChunkType {
     Section,
     Block,
-    Drawer
+    Drawer,
+    ListItem
 }
 
 interface IChunk {
@@ -147,7 +148,13 @@ class OrgFoldingAndOutlineDocumentState {
                 }
 
                 // close previous sections
-                while (stack.length > 0 && stack[stack.length - 1].level >= currentLevel) {
+                let top = null;
+                while (
+                    stack.length > 0 &&
+                    (top = stack[stack.length - 1]) &&
+                    ((top.type === ChunkType.Section && top.level >= currentLevel) ||
+                        top.type !== ChunkType.Section)
+                ) {
                     const localTop = stack.pop();
                     this.createSection(localTop, lineNumber - 1);
                 }
@@ -156,6 +163,29 @@ class OrgFoldingAndOutlineDocumentState {
                 stack.push({
                     title,
                     type: ChunkType.Section,
+                    level: currentLevel,
+                    sectionNumber: currentIndices.join('.'),
+                    startLine: lineNumber
+                });
+            } else if (utils.isListItemLine(text)) {
+                const currentLevel = utils.getWhitespacePrefixCount(text);
+
+                // close previous list item
+                let top = null;
+                while (
+                    stack.length > 0 &&
+                    (top = stack[stack.length - 1]) &&
+                    top.type === ChunkType.ListItem &&
+                    top.level >= currentLevel
+                ) {
+                    const localTop = stack.pop();
+                    this.createSection(localTop, lineNumber - 1);
+                }
+
+                const title = utils.getHeaderTitle(text);
+                stack.push({
+                    title,
+                    type: ChunkType.ListItem,
                     level: currentLevel,
                     sectionNumber: currentIndices.join('.'),
                     startLine: lineNumber
