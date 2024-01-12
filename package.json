@@ -1,6 +1,6 @@
 {
-    "name": "org-mode",
-    "displayName": "Org Mode",
+    "name": "org-mode-plus",
+    "displayName": "Org Mode Plus",
     "description": "Emacs Org mode support for VSCode",
     "keywords": [
         "org",
