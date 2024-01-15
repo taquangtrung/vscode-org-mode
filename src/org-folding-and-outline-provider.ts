@@ -139,9 +139,11 @@ class OrgFoldingAndOutlineDocumentState {
                         currentIndices.push(1);
                     }
                 } else if (currentLevel < indexLength) {
-                    for (let i = currentLevel; i < indexLength; i++) {
-                        currentIndices.pop();
+                    let idx = 1;
+                    for (let i = currentLevel; i <= indexLength; i++) {
+                        idx = currentIndices.pop();
                     }
+                    currentIndices.push(idx + 1);
                 } else {
                     const idx = currentIndices.pop();
                     currentIndices.push(idx + 1);
