@@ -1947,6 +1947,9 @@
                     "include": "#drawer"
                 },
                 {
+                    "include": "#scheduled"
+                },
+                {
                     "include": "#keywords"
                 }
             ]
@@ -2143,7 +2146,15 @@
             "patterns": [
                 {
                     "name": "markup.marker.drawer.org",
-                    "match": "^:.+"
+                    "match": "^[\\s\\t]*:.+"
+                }
+            ]
+        },
+        "scheduled": {
+            "patterns": [
+                {
+                    "name": "markup.marker.scheduled.org",
+                    "match": "^[\\s\\t]*SCHEDULED:.+"
                 }
             ]
         },
