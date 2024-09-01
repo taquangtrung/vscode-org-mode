@@ -2161,7 +2161,7 @@
         "keywords": {
             "patterns": [
                 {
-                    "match": "^(#\\+(title|author|date):)\\s(.*)$",
+                    "match": "^(#\\+(?i)(title|author|date)(?-i):)\\s(.*)$",
                     "captures": {
                         "1": {
                             "name": "markup.property.name.org"
