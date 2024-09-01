@@ -3,9 +3,15 @@
     "name": "Org Markup",
     "patterns": [
         {
-            "name": "heading.1.org",
-            "begin": "^[*]{1}\\s+",
-            "end": "$",
+            "match": "^([*]{1})\\s+(.*)$",
+            "captures": {
+                "1": {
+                    "name": "punctuation.definition.heading.org"
+                },
+                "2": {
+                    "name": "heading.1.org"
+                }
+            },
             "patterns": [
                 {
                     "include": "#header-matches"
@@ -13,9 +19,15 @@
             ]
         },
         {
-            "name": "heading.2.org",
-            "begin": "^[*]{2}\\s+",
-            "end": "$",
+            "match": "^([*]{2})\\s+(.*)$",
+            "captures": {
+                "1": {
+                    "name": "punctuation.definition.heading.org"
+                },
+                "2": {
+                    "name": "heading.2.org"
+                }
+            },
             "patterns": [
                 {
                     "include": "#header-matches"
@@ -23,9 +35,15 @@
             ]
         },
         {
-            "name": "heading.3.org",
-            "begin": "^[*]{3}\\s+",
-            "end": "$",
+            "match": "^([*]{3})\\s+(.*)$",
+            "captures": {
+                "1": {
+                    "name": "punctuation.definition.heading.org"
+                },
+                "2": {
+                    "name": "heading.3.org"
+                }
+            },
             "patterns": [
                 {
                     "include": "#header-matches"
@@ -33,9 +51,15 @@
             ]
         },
         {
-            "name": "heading.4.org",
-            "begin": "^[*]{4}\\s+",
-            "end": "$",
+            "match": "^([*]{4})\\s+(.*)$",
+            "captures": {
+                "1": {
+                    "name": "punctuation.definition.heading.org"
+                },
+                "2": {
+                    "name": "heading.4.org"
+                }
+            },
             "patterns": [
                 {
                     "include": "#header-matches"
@@ -43,9 +67,15 @@
             ]
         },
         {
-            "name": "heading.5.org",
-            "begin": "^[*]{5}\\s+",
-            "end": "$",
+            "match": "^([*]{5})\\s+(.*)$",
+            "captures": {
+                "1": {
+                    "name": "punctuation.definition.heading.org"
+                },
+                "2": {
+                    "name": "heading.5.org"
+                }
+            },
             "patterns": [
                 {
                     "include": "#header-matches"
@@ -53,9 +83,15 @@
             ]
         },
         {
-            "name": "heading.6.org",
-            "begin": "^[*]{6}\\s+",
-            "end": "$",
+            "match": "^([*]{6})\\s+(.*)$",
+            "captures": {
+                "1": {
+                    "name": "punctuation.definition.heading.org"
+                },
+                "2": {
+                    "name": "heading.6.org"
+                }
+            },
             "patterns": [
                 {
                     "include": "#header-matches"
